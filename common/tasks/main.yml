@@ -1,38 +1,38 @@
 ---
 # tasks file for common
-- name: set timezone to Europe/Moscow
+- name: set timezone to {{ timezn}}
   timezone:
-    name: Europe/Moscow
+    name: "{{ timezn }}"
 
 - name: change hostname
   hostname:
     name: "{{ inventory_hostname }}"
 
 - block:
-    - name: create a swap file
-      shell: fallocate -l {{ swap_size }} /swapfile
+    - name: create a swap file {{ swapfl }}
+      shell: fallocate -l {{ swap_size }} {{ swapfl }}
       args:
-        creates: /swapfile
+        creates: "{{ swapfl }}"
 
     - name: set the correct permissions
       file:
-        path: /swapfile
+        path: "{{ swapfl }}"
         owner: root
         group: root
         mode: '0600'
 
     - name: make the file a swap file
-      shell: mkswap /swapfile
+      shell: mkswap {{ swapfl }}
       when: ansible_facts.swapfree_mb == 0
 
     - name: enable the swap file
-      shell: swapon /swapfile
+      shell: swapon {{ swapfl }}
       when: ansible_facts.swapfree_mb == 0
 
     - name: add swap file to fstab
       mount:
         name: none
-        src: /swapfile
+        src: "{{ swapfl }}"
         fstype: swap
         opts: sw
         passno: 0

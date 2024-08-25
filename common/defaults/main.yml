@@ -1,3 +1,5 @@
 ---
 # defaults file for common
 swap_size: 1G
+timezn: Europe/Moscow
+swapfl: /swapfile
