@@ -1,0 +1,21 @@
+---
+# tasks file for swaptrasher
+- block:
+  - name: Verify swapfile {{ swapfl }} is created
+    shell: test -e "{{ swapfl }}"
+    register: command_result
+    failed_when: command_result.rc != 0
+
+  - name: Disable swapfile {{ swapfl }}
+    shell: swapoff {{ swapfl }}
+
+  - name: Remove entry swapfile in fstab
+    lineinfile:
+      dest: /etc/fstab
+      regex: "^[ \t]*{{ swapfl }}.*"
+      state: absent
+
+  - name: Delete swap file
+    file:
+      path: "{{ swapfl }}"
+      state: absent
