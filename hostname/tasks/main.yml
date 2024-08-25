@@ -1,0 +1,6 @@
+---
+# tasks file for hostname
+- name: Change hostname on host
+  hostname:
+    name: "{{ hostname }}"
+    use: systemd
