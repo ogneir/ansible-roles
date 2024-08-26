@@ -19,3 +19,4 @@
     file:
       path: "{{ swapfl }}"
       state: absent
+  become: yes

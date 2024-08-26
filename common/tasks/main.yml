@@ -1,14 +1,18 @@
 ---
 # tasks file for common
-- name: set timezone to {{ timezn}}
-  timezone:
-    name: "{{ timezn }}"
-
-- name: change hostname
-  hostname:
-    name: "{{ inventory_hostname }}"
-
 - block:
+    - name: set timezone to {{ timezn}}
+      timezone:
+        name: "{{ timezn }}"
+
+    - name: change hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: update apt cache
+      apt:
+        update_cache: yes
+
     - name: create a swap file {{ swapfl }}
       shell: fallocate -l {{ swap_size }} {{ swapfl }}
       args:
@@ -38,3 +42,4 @@
         passno: 0
         dump: 0
         state: present
+  become: yes
